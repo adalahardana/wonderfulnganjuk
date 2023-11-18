@@ -224,30 +224,6 @@
     
             <button type="submit" onclick="tampilkanReservasi()">Pesan Sekarang</button>
     </form>
-
-    <!-- Tambahkan area untuk menampilkan data reservasi -->
-    <div id="infoReservasi"></div>
-</section>
-
-<script>
-    function tampilkanReservasi() {
-        // Mendapatkan nilai input dari formulir
-        var customerName = document.getElementById('customerName').value;
-        var selectedHotel = document.getElementById('hotelSelect').value;
-        var checkInDate = document.getElementById('checkInDate').value;
-        var checkOutDate = document.getElementById('checkOutDate').value;
-        var payingMethod = document.getElementById('payingMethod').value;
-
-        // Menampilkan data reservasi di area infoReservasi
-        var infoReservasi = document.getElementById('infoReservasi');
-        infoReservasi.innerHTML = "<h3>Informasi Reservasi:</h3>" +
-            "<p>Nama Pemesan: " + customerName + "</p>" +
-            "<p>Penginapan: " + selectedHotel + "</p>" +
-            "<p>Tanggal Check-in: " + checkInDate + "</p>" +
-            "<p>Tanggal Check-out: " + checkOutDate + "</p>" +
-            "<p>Cara Pembayaran: " + payingMethod + "</p>";
-    }
-</script>
     </section>    
 
     <section id="PemesananTransportasi">
