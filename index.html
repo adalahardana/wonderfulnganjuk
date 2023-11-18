@@ -180,7 +180,7 @@
         <h2>Reservasi </h2>
         <p>Silakan pilih penginapan yang ingin Anda pesan:</p>
         
-        <form>
+        <form id="penginapanForm">
             <label for="customerName">Nama Pemesan:</label>
              <input type="text" id="customerName" name="customerName" required>
 
@@ -222,7 +222,7 @@
     
             <br>
     
-            <button type="button" onclick="tampilkanReservasi()">Pesan Sekarang</button>
+            <button type="submit" onclick="tampilkanReservasi()">Pesan Sekarang</button>
     </form>
 
     <!-- Tambahkan area untuk menampilkan data reservasi -->
@@ -254,7 +254,7 @@
         <h2>Pemesanan Transportasi</h2>
         
         <!-- Formulir Pemesanan Tiket Kereta Api -->
-        <form>
+        <form id="trainForm">
             <h3>Pemesanan Tiket Kereta Api</h3>
 
             <label for="customerName">Nama Pemesan:</label>
@@ -296,7 +296,7 @@
         </form>
     
         <!-- Formulir Pemesanan Tiket Bus -->
-        <form>
+        <form id="busForm">
             <h3>Pemesanan Tiket Bus</h3>
 
             <label for="customerName">Nama Pemesan:</label>
@@ -338,7 +338,7 @@
         </form>
     
         <!-- Formulir Pemesanan Tiket Travel -->
-        <form>
+        <form id="travelForm">
             <h3>Pemesanan Tiket Travel</h3>
 
             <label for="customerName">Nama Pemesan:</label>
@@ -399,6 +399,160 @@
             // Tampilkan bagian yang dipilih
             document.getElementById(contentID).style.display = 'block';
         }
+    </script>
+
+    <script type="module">
+        // FIREBASE SETTINGS -- DO NOT EDIT
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-analytics.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        const firebaseConfig = {
+            apiKey: "AIzaSyDf1hdFVVBC06chgR8hlvhY4b-VPmhN8ec",
+            authDomain: "wonderfulnganjuk-ed1d5.firebaseapp.com",
+            databaseURL: "https://wonderfulnganjuk-ed1d5-default-rtdb.firebaseio.com",
+            projectId: "wonderfulnganjuk-ed1d5",
+            storageBucket: "wonderfulnganjuk-ed1d5.appspot.com",
+            messagingSenderId: "785984019362",
+            appId: "1:785984019362:web:4b81d78a67f84289afb0fb",
+            measurementId: "G-5V1VYXS6Q7"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        import {getDatabase, set, get, update, remove, ref, child} from "https://www.gstatic.com/firebasejs/10.6.0/firebase-database.js";
+
+        const db = getDatabase();
+        // END OF FIREBASE SETTINGS
+
+        function uuid() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
+
+        const trainForm = document.forms['trainForm'];
+        const customerNameTrain = trainForm.elements.customerName;
+        const trainType = trainForm.elements.trainType;
+        const trainDate = trainForm.elements.trainDate;
+        const numberOfPassengersTrain = trainForm.elements.numberOfPassengersTrain;
+        const payingMethodTrain = trainForm.elements.payingMethod;
+        
+        trainForm.addEventListener('submit', saveTrainFormData);
+        function saveTrainFormData(e) {
+            e.preventDefault();
+            let id = uuid();
+
+            set(ref(db, "booking_train/" + id), {
+                id: id,
+                customer_name: customerNameTrain.value,
+                train_type: trainType.value,
+                train_date: trainDate.value,
+                number_of_passengers_train: numberOfPassengersTrain.value,
+                paying_method: payingMethodTrain.value
+            })
+            .then(() => {
+                alert("Data saved succesfully!")
+            })
+            .catch((error) => {
+                alert(error);
+            })
+        }
+
+
+        const busForm = document.forms['busForm'];
+        const customerNameBus = busForm.elements.customerName;
+        const busType = busForm.elements.busType;
+        const busDate = busForm.elements.busDate;
+        const numberOfPassengersBus = busForm.elements.numberOfPassengersBus;
+        const payingMethodBus = busForm.elements.payingMethod;
+
+        busForm.addEventListener('submit', saveBusFormData);
+        function saveBusFormData(e) {
+            e.preventDefault();
+            let id = uuid();
+
+            set(ref(db, "booking_bus/" + id), {
+                id: id,
+                customer_name: customerNameBus.value,
+                bus_type: busType.value,
+                bus_date: busDate.value,
+                number_of_passengers_bus: numberOfPassengersBus.value,
+                paying_method: payingMethodBus.value
+            })
+            .then(() => {
+                alert("Data saved succesfully!")
+            })
+            .catch((error) => {
+                alert(error);
+            })
+        }
+
+
+        const travelForm = document.forms['travelForm'];
+        const customerNameTravel = travelForm.elements.customerName;
+        const travelType = travelForm.elements.travelType;
+        const travelDate = travelForm.elements.travelDate;
+        const numberOfPassengersTravel = travelForm.elements.numberOfPassengersTravel;
+        const payingMethodTravel = travelForm.elements.payingMethod;
+
+        travelForm.addEventListener('submit', saveTravelFormData);
+        function saveTravelFormData(e) {
+            e.preventDefault();
+            let id = uuid();
+
+            set(ref(db, "booking_travel/" + id), {
+                id: id,
+                customer_name: customerNameTravel.value,
+                travel_type: travelType.value,
+                travel_date: travelDate.value,
+                number_of_passengers_travel: numberOfPassengersTravel.value,
+                paying_method: payingMethodTravel.value
+            })
+            .then(() => {
+                alert("Data saved succesfully!")
+            })
+            .catch((error) => {
+                alert(error);
+            })
+        }
+
+
+
+        const penginapanForm = document.forms['penginapanForm'];
+        const customerNamePenginapan = penginapanForm.elements.customerName;
+        const hotelSelect = penginapanForm.elements.hotelSelect;
+        const checkInDate = penginapanForm.elements.checkInDate;
+        const checkOutDate = penginapanForm.elements.checkOutDate;
+        const payingMethodPenginapan = penginapanForm.elements.payingMethod;
+
+        penginapanForm.addEventListener('submit', savePenginapanFormData);
+        function savePenginapanFormData(e) {
+            e.preventDefault();
+            let id = uuid();
+
+            set(ref(db, "booking_penginapan/" + id), {
+                id: id,
+                customer_name: customerNamePenginapan.value,
+                hotel_select: hotelSelect.value,
+                checkin_date: checkInDate.value,
+                checkout_date: checkOutDate.value,
+                paying_method: payingMethodPenginapan.value
+            })
+            .then(() => {
+                alert("Data saved succesfully!")
+            })
+            .catch((error) => {
+                alert(error);
+            })
+        }
+
     </script>
 </body>
 </html>
